@@ -2,7 +2,10 @@ package com.aprendendospring.course.entities;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Set;
+import java.util.HashSet;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import com.aprendendospring.course.entities.enums.OrderStatus;
 
@@ -26,9 +30,14 @@ public class Order implements Serializable {
     
     private Integer orderStatus;
 
+    
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order() {
     }
@@ -73,6 +82,10 @@ public class Order implements Serializable {
     public void setClient(User client) {
         this.client = client;
     }
+
+   public Set<OrderItem> getItems() {
+        return items;
+   }
 
     @Override
     public int hashCode() {
