@@ -14,6 +14,9 @@ import com.aprendendospring.course.entities.User;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import com.aprendendospring.course.repositories.UserRepository;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping(value = "/users")
@@ -45,5 +48,11 @@ public class UserResource {
     public ResponseEntity<Void> delete(@PathVariable Long id) { //PathVariable é para pegar o id que vem na url 
         service.delete(id); // Isso faz deletar 
         return ResponseEntity.noContent().build(); // Esse faz retornar a resposta de sucesso sem conteúdo
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) { // @RequestBody é para pegar o objeto que vem no corpo da requisição
+        obj = service.update(id, obj); // Isso faz atualizar 
+        return ResponseEntity.ok().body(obj); // Esse faz retornar a resposta de sucesso com o objeto atualizado
     }
 }

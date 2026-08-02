@@ -31,4 +31,21 @@ public class UserService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    
+    public User update(Long id, User obj) { // User obj será os dados que serão atualizados
+        User entity = repository.getReferenceById(id); // getReferenceById é para buscar o objeto no banco de dados
+        updateData(entity, obj); // updateData é para atualizar os dados do objeto, entity é o objeto que está no banco de dados e obj é o objeto que veio da requisição
+        return repository.save(entity); // repository.save é para salvar o objeto no banco de dados
+   
+        
+    }
+
+    private void updateData(User entity, User obj) { // updateData é para atualizar os dados do objeto, entity é o objeto que está no banco de dados e obj é o objeto que veio da requisição
+        entity.setName(obj.getName()); // setName é para atualizar o nome do objeto
+        entity.setEmail(obj.getEmail()); // setEmail é para atualizar o email do objeto
+        entity.setPhone(obj.getPhone()); // setPhone é para atualizar o telefone do objeto
+    }
+
+
 }
