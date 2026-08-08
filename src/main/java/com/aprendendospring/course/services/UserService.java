@@ -5,8 +5,11 @@ import java.util.List;
 import com.aprendendospring.course.entities.User;
 import com.aprendendospring.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import com.aprendendospring.course.services.exceptions.ResourceNotFoundException;
+import com.aprendendospring.course.services.exceptions.DatabaseException;
 
 
 @Service
@@ -30,7 +33,13 @@ public class UserService {
     } 
 
     public void delete(Long id) {
+        try {
         repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(id); // lança a exceção caso o id não seja encontrado  
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage()); // lança a exceção caso o id seja encontrado mas não possa ser deletado por causa de integridade referencial
+        }
     }
 
     
